@@ -9,6 +9,11 @@ You will need the following tools to build the firmware:
   - GNU make
   - ARM GNU gcc toolchain
 
+On Linux (Ubuntu) you can install all the packages via apt:
+```
+apt install cmake make ninja gcc-arm-none-eabi binutils-arm-none-eabi
+```
+
 On MacOS you can install everything via Homebrew:
 ```
 brew install gcc-arm-embedded cmake make ninja
