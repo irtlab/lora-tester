@@ -13,6 +13,7 @@ On Linux (Ubuntu) you can install all the packages via apt:
 ```
 apt install cmake make ninja gcc-arm-none-eabi binutils-arm-none-eabi
 ```
+Note: On Ubuntu 22.04 you also need to edit sdk/CMakeLists.txt and comment out the line which contains "no-warn-rwx-segments".
 
 On MacOS you can install everything via Homebrew:
 ```
