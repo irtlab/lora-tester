@@ -39,4 +39,10 @@ If you want to re-build everything from scratch, run `make clean`. You need to r
 
 # Flash the Firmware
 
-TBD
+You will need the Hardwario Tower firmware tool `bcf` to flash the firmware into the device. Install it if you don't have it:
+```
+python3 -m venv .venv
+. .venv/bin/activate
+(.venv)pip install bcf
+```
+Now you should be able to run the command `bcf`.
