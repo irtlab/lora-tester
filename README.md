@@ -3,6 +3,9 @@
 This repository contains firmware for a LoRaWAN tester device based on the Hardwario Tower kit.
 
 # Build the Firmware
+
+Note: If you do not need to modify the firmware, you can also download a [pre-build binary image](https://github.com/irtlab/lora-tester/releases/).
+
 You will need the following tools to build the firmware:
   - cmake
   - ninja
