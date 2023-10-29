@@ -52,3 +52,7 @@ Connect the tester device to your computer with a USB cable and flash the firmwa
 bcf flash --device <device> --unprotect lora-tester-1.0.0.tower.bin
 ```
 where `<device>` is the pathname to the device's special file under /dev.
+
+# Join The Things Network
+
+Follow [these instructions](https://github.com/hardwario/lora-modem/wiki/Connecting-to-The-Things-Network) to get the tester device connected to The Things Network (TTN).
