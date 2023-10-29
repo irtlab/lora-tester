@@ -44,7 +44,7 @@ shift $((OPTIND-1))
 version="$1"
 
 orig_dir="$(pwd)"
-basename="${basename:-lora-modem}"
+basename="${basename:-lora-tester}"
 dry_run="${dry_run:-0}"
 sign="${sign:-1}"
 check_git_status="${check_git_status:-1}"
