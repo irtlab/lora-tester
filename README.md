@@ -33,3 +33,7 @@ make
 The `make config` step only needs to be run once. It generates Makefile(s) out of cmake templates. The `make` step builds the binary firmware image out of the source code.
 
 If you want to re-build everything from scratch, run `make clean`. You need to run `make config` again after this.
+
+# Flash the Firmware
+
+TBD
