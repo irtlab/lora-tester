@@ -1,8 +1,10 @@
-all:
+debug:
+	cmake -B obj/debug . -G Ninja -DTYPE=debug -DCMAKE_TOOLCHAIN_FILE=sdk/toolchain/toolchain.cmake
 	ninja -C obj/debug
 
-config:
-	cmake -B obj/debug . -G Ninja -DTYPE=debug -DCMAKE_TOOLCHAIN_FILE=sdk/toolchain/toolchain.cmake
+release:
+	cmake -B obj/release . -G Ninja -DTYPE=release -DCMAKE_TOOLCHAIN_FILE=sdk/toolchain/toolchain.cmake
+	ninja -C obj/release
 
 .PHONY: clean
 clean:
