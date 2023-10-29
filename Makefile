@@ -10,5 +10,5 @@ release:
 clean:
 	rm -rf obj
 	rm -rf out
-	rm firmware.bin
+	rm -f firmware.bin
 
