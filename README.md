@@ -49,7 +49,7 @@ Connect the tester device to your computer with a USB cable and flash the firmwa
 ```
 bcf flash --device <device> --unprotect firmware.bin
 ```
-where `<device>` is the pathname to the device's special file under /dev.
+where `<device>` is the pathname to the device's special file under /dev. (something like /dev/tty.usbserial-xxxx)
 
 # Join The Things Network
 
