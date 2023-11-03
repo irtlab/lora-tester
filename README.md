@@ -47,7 +47,7 @@ Now you should be able to run the command `bcf`.
 
 Connect the tester device to your computer with a USB cable and flash the firmware to the device:
 ```
-bcf flash --device <device> --unprotect lora-tester-1.0.0.tower.bin
+bcf flash --device <device> --unprotect firmware.bin
 ```
 where `<device>` is the pathname to the device's special file under /dev.
 
