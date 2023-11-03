@@ -41,7 +41,7 @@ You will need the Hardwario Tower firmware tool `bcf` to flash the firmware into
 ```
 python3 -m venv .venv
 . .venv/bin/activate
-(.venv)pip install bcf
+pip install bcf
 ```
 Now you should be able to run the command `bcf`.
 
