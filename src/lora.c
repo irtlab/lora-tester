@@ -6,6 +6,7 @@ static twr_cmwx1zzabz_t modem;
 
 lora_state_t lora;
 
+static bool last_uplink_confirmed = false; 
 
 static void lora_callback(twr_cmwx1zzabz_t* self, twr_cmwx1zzabz_event_t event, void* param)
 {
@@ -21,9 +22,11 @@ static void lora_callback(twr_cmwx1zzabz_t* self, twr_cmwx1zzabz_event_t event, 
         case TWR_CMWX1ZZABZ_EVENT_SEND_MESSAGE_START:
             twr_log_debug("lora: Sending message");
             voltage_measure(20, false);
+            
             break;
 
         case TWR_CMWX1ZZABZ_EVENT_SEND_MESSAGE_DONE:
+            last_uplink_confirmed = false;  // If the message is sent, consider it as not confirmed unless explicitly confirmed
             twr_log_debug("lora: Message sent");
             break;
 
@@ -54,12 +57,18 @@ static void lora_callback(twr_cmwx1zzabz_t* self, twr_cmwx1zzabz_event_t event, 
             break;
 
         case TWR_CMWX1ZZABZ_EVENT_MESSAGE_CONFIRMED:
+			lora.ack_received = true;
+            last_uplink_confirmed = true;
             twr_log_debug("lora: Message confirmed");
             twr_cmwx1zzabz_rfq(&modem);
             twr_scheduler_plan_now(0);
             break;
 
         case TWR_CMWX1ZZABZ_EVENT_MESSAGE_NOT_CONFIRMED:
+			lora.ack_received = false;
+            last_uplink_confirmed = false;
+			lora.rssi = 0;
+            lora.snr = 0;
             twr_log_warning("lora: Message NOT confirmed");
             twr_scheduler_plan_now(0);
             break;

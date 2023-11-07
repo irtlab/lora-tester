@@ -12,7 +12,8 @@ typedef struct __attribute__((packed)) message {
     int16_t temperature;
     uint8_t min_voltage;
     int16_t rssi;
-    int16_t snr;
+    int8_t snr;
+    uint8_t flags;
 } message_t;
 
 
@@ -43,6 +44,19 @@ static message_t build_status_message()
     msg.min_voltage = isnan(voltage_min) ? UINT8_MAX : (uint8_t)round(voltage_min * 10.0);
     msg.rssi = lora.rssi;
     msg.snr = lora.snr;
+
+    // Flag set logic.
+    
+    //msg.flags = 0; // Reset (DEBUG LINE) 
+    
+    if (last_uplink_confirmed) {
+        msg.flags |= FLAG_UPLINK_CONFIRMED;
+    }
+    if (lora.ack_received) {
+        msg.flags |= FLAG_ACK_RECEIVED;
+    }
+
+
     return msg;
 }
 
