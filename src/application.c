@@ -45,17 +45,11 @@ static message_t build_status_message()
     msg.rssi = lora.rssi;
     msg.snr = lora.snr;
 
-    // Flag set logic.
-    
-    //msg.flags = 0; // Reset (DEBUG LINE) 
-    
-    if (last_uplink_confirmed) {
-        msg.flags |= FLAG_UPLINK_CONFIRMED;
-    }
-    if (lora.ack_received) {
-        msg.flags |= FLAG_ACK_RECEIVED;
-    }
-
+    // Flag set logic.    
+    if (last_uplink_confirmed) msg.flags |= FLAG_UPLINK_CONFIRMED;
+    else msg.flags &= ~FLAG_UPLINK_CONFIRMED;
+    if (lora.ack_received) msg.flags |= FLAG_ACK_RECEIVED;
+    else msg.flags &= ~FLAG_ACK_RECEIVED;
 
     return msg;
 }
@@ -152,12 +146,12 @@ void application_task(void)
         if (measurements_left > 0) break;
         if (send) {
             message_t msg = build_status_message();
+            last_uplink_confirmed = false;
             lora_send(&msg, sizeof(msg), true);
             state = STATE_TRANSMITTING;
             led_set(true);
         } else {
-            twr_atci_printfln("status: temperature=%.1f C, min_voltage=%.1f V",
-                temp_get(), voltage_min);
+            twr_atci_printfln("status: temperature=%.1f C, min_voltage=%.1f V", temp_get(), voltage_min);
             state = STATE_IDLE;
         }
 
