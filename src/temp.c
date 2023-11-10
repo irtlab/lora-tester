@@ -18,6 +18,9 @@ static void event_handler(twr_tmp112_t* self, twr_tmp112_event_t event, void* pa
         case TWR_TMP112_EVENT_UPDATE:
             twr_tmp112_get_temperature_celsius(self, &current);
             break;
+
+        default:
+            break;
     }
 
     measurements_left--;

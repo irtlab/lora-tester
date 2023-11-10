@@ -61,6 +61,9 @@ static void event_handler(twr_module_battery_event_t event, void* param)
             twr_log_error("voltage: Battery voltage measurement error");
             voltage_current = NAN;
             break;
+
+        default:
+            break;
     }
 
     measurements_left--;

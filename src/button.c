@@ -20,6 +20,9 @@ static void handler(twr_button_t *button, twr_button_event_t event, void *param)
 
         case TWR_BUTTON_EVENT_RELEASE:
             break;
+
+        default:
+            break;
     }
 }
 
