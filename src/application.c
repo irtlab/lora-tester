@@ -1,5 +1,6 @@
 #include <stdarg.h>
 #include <twr.h>
+#include <twr_config.h>
 #include "voltage.h"
 #include "lora.h"
 #include "globals.h"
@@ -25,9 +26,15 @@ static enum state {
 } state = STATE_IDLE;
 
 
+static struct config {
+    bool confirmed;
+} config = {
+    .confirmed = true
+};
+
+
 static volatile twr_tick_t tick = 0;
 static bool send;
-static bool confirmed_uplinks = true;
 
 
 static inline uint16_t htons(uint16_t v)
@@ -98,18 +105,19 @@ static bool at_set_confirmed(twr_atci_param_t *param)
     if (!twr_atci_get_uint(param, &value)) return false;
 
     switch(value) {
-        case 0: confirmed_uplinks = false; break;
-        case 1: confirmed_uplinks = true; break;
+        case 0: config.confirmed = false; break;
+        case 1: config.confirmed = true; break;
         default: return false; break;
     }
 
+    twr_config_save();
     return true;
 }
 
 
 static bool at_get_confirmed()
 {
-    twr_atci_printfln("$CONFIRMED: %d", confirmed_uplinks);
+    twr_atci_printfln("$CONFIRMED: %d", config.confirmed);
     return true;
 }
 
@@ -126,6 +134,8 @@ void application_init(void)
 
     twr_log_init(log_level, TWR_LOG_TIMESTAMP_ABS);
     lora_init(debug);
+
+    twr_config_init(0x87654321, &config, sizeof(config), &config);
 
     voltage_init();
     temp_init();
@@ -171,7 +181,7 @@ void application_task(void)
         if (measurements_left > 0) break;
         if (send) {
             message_t msg = build_status_message();
-            lora_send(&msg, sizeof(msg), confirmed_uplinks);
+            lora_send(&msg, sizeof(msg), config.confirmed);
             state = STATE_TRANSMITTING;
             led_set(true);
         } else {
