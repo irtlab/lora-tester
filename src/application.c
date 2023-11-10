@@ -27,6 +27,7 @@ static enum state {
 
 static volatile twr_tick_t tick = 0;
 static bool send;
+static bool confirmed_uplinks = true;
 
 
 static inline uint16_t htons(uint16_t v)
@@ -90,6 +91,29 @@ void on_click(void)
 }
 
 
+static bool at_set_confirmed(twr_atci_param_t *param)
+{
+    uint32_t value;
+
+    if (!twr_atci_get_uint(param, &value)) return false;
+
+    switch(value) {
+        case 0: confirmed_uplinks = false; break;
+        case 1: confirmed_uplinks = true; break;
+        default: return false; break;
+    }
+
+    return true;
+}
+
+
+static bool at_get_confirmed()
+{
+    twr_atci_printfln("$CONFIRMED: %d", confirmed_uplinks);
+    return true;
+}
+
+
 void application_init(void)
 {
     int log_level = TWR_LOG_LEVEL_DUMP;
@@ -115,6 +139,7 @@ void application_init(void)
         LED_AT_COMMANDS,
         {"$SEND", at_send, NULL, NULL, NULL, "Send current status immediately"},
         {"$STATUS", at_get_status, NULL, NULL, NULL, "Get current device status"},
+        {"$CONFIRMED", NULL, at_set_confirmed, at_get_confirmed, NULL, "Configure confirmed/unconfirmed uplinks"},
         #if defined(VERSION) && defined(BUILD_DATE)
         {"$VER", at_version, NULL, NULL, NULL, "Get firmware version and build date"}
         #endif
