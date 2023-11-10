@@ -46,7 +46,7 @@ static message_t build_status_message()
     msg.snr = lora.snr;
 
     // Flag set logic.    
-    if (last_uplink_confirmed) msg.flags |= FLAG_UPLINK_CONFIRMED;
+    if (lora.confirmed) msg.flags |= FLAG_UPLINK_CONFIRMED;
     else msg.flags &= ~FLAG_UPLINK_CONFIRMED;
     if (lora.ack_received) msg.flags |= FLAG_ACK_RECEIVED;
     else msg.flags &= ~FLAG_ACK_RECEIVED;
@@ -146,8 +146,7 @@ void application_task(void)
         if (measurements_left > 0) break;
         if (send) {
             message_t msg = build_status_message();
-            last_uplink_confirmed = false;
-            lora_send(&msg, sizeof(msg), true);
+            lora_send(&msg, sizeof(msg), confirmed_uplinks);
             state = STATE_TRANSMITTING;
             led_set(true);
         } else {
