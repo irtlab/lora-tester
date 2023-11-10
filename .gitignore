@@ -4,3 +4,4 @@ release/
 .DS_Store
 firmware.bin
 .vscode/
+/.venv
