@@ -10,6 +10,7 @@ typedef struct {
     uint8_t gwcount;
     uint32_t uplink;
     uint32_t downlink;
+	bool ack_received; 
 } lora_state_t;
 
 extern lora_state_t lora;
@@ -17,3 +18,6 @@ extern lora_state_t lora;
 extern void lora_init(bool debug);
 extern void lora_send(const void* msg, size_t len, bool confirmed);
 extern bool lora_ready();
+
+
+extern bool last_uplink_confirmed;

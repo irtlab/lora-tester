@@ -12,7 +12,8 @@ typedef struct __attribute__((packed)) message {
     int16_t temperature;
     uint8_t min_voltage;
     int16_t rssi;
-    int16_t snr;
+    int8_t snr;
+    uint8_t flags;
 } message_t;
 
 
@@ -43,6 +44,13 @@ static message_t build_status_message()
     msg.min_voltage = isnan(voltage_min) ? UINT8_MAX : (uint8_t)round(voltage_min * 10.0);
     msg.rssi = lora.rssi;
     msg.snr = lora.snr;
+
+    // Flag set logic.    
+    if (last_uplink_confirmed) msg.flags |= FLAG_UPLINK_CONFIRMED;
+    else msg.flags &= ~FLAG_UPLINK_CONFIRMED;
+    if (lora.ack_received) msg.flags |= FLAG_ACK_RECEIVED;
+    else msg.flags &= ~FLAG_ACK_RECEIVED;
+
     return msg;
 }
 
@@ -138,12 +146,12 @@ void application_task(void)
         if (measurements_left > 0) break;
         if (send) {
             message_t msg = build_status_message();
+            last_uplink_confirmed = false;
             lora_send(&msg, sizeof(msg), true);
             state = STATE_TRANSMITTING;
             led_set(true);
         } else {
-            twr_atci_printfln("status: temperature=%.1f C, min_voltage=%.1f V",
-                temp_get(), voltage_min);
+            twr_atci_printfln("status: temperature=%.1f C, min_voltage=%.1f V", temp_get(), voltage_min);
             state = STATE_IDLE;
         }
 
